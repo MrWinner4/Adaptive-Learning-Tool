@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<script src="{% static 'js/main.js' %}" defer></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{%block title%}Start Code{%endblock%} </title>
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a> | <a href="/about">About</a> | <a href="/login">Login</a>
+    </nav>
+    <header>
+        <h1>Welcome to the {%block h1%} {%endblock%} page.</h1>
+    </header>
+
+
+    <main>
+        {%block content%}
+
+        {%endblock%}
+    </main>
+
+    <footer>
+        <p>© Start Code, 2024. Developed by Judd Ebert.</p>
+    </footer>
+    
+</body>
+</html>
