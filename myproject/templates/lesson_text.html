@@ -1,0 +1,11 @@
+{%extends 'homePage.html'%}
+
+{%block title%}
+    Lesson {{ lesson.id }}
+{%endblock%}
+
+{%block content%}
+    <p>{{ lesson.lecture }}</p>
+    <a href="{{ lesson.id }}/quiz">Take Quiz</a>
+    <a href="{{ lesson.id }}/interactive">Coding Interactive</a>
+{%endblock%}

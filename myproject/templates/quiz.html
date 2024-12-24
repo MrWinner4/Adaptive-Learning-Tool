@@ -1,0 +1,11 @@
+{%extends 'homePage.html'%}
+
+
+{%block title%}
+    Quiz {{ quiz.lesson.id }}
+{%endblock%}
+
+{%block content%}
+    <h1>Quiz for {{ quiz.lesson.title }}</h1>
+    <pre>{{ quiz.questions }}</pre>
+{% endblock %}

@@ -6,12 +6,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
+    <title>{%block title%}Home Page{%endblock%}</title>
 </head>
 <body>
     <nav>
-        <a href="/homePage">Home 🏠</a> | <a href="/logout">Logout</a>
+        <a href="/homePage">Home 🏠</a> | <a href="/logout">Logout ⬇️</a>
     </nav>
-    
+    <main>
+        {%block content%}
+        <h2>What's up home page users!</h2>
+        {%endblock%}
+    </main>
 </body>
 </html>
