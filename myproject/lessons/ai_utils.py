@@ -21,8 +21,68 @@ os.environ["GRPC_VERBOSITY"] = "ERROR"
 os.environ["GLOG_minloglevel"] = "2"
 
 genai.configure(api_key=os.getenv("BARD_API_KEY"))
-def save_questions_from_json(jsonData, subject):
 
+def incorrect_answer(subject, question, all_answers, incorrect_answer):
+    try:
+        model = genai.GenerativeModel(model_name="gemini-1.5-flash")
+        allAnswersString = ""
+        for answer in all_answers:
+            allAnswersString += answer + ", "
+        response = model.generate_content(
+            f"""
+                A high school student currently learning about {subject} got
+                this question wrong: {question}. They put the answer as
+                {incorrect_answer} out of {all_answers}. Explain to them in 1-2 sentences why it
+                is incorrect and try to lead them to the correct answer, without
+                outright telling them.
+            """
+        )
+        return response.text
+    except Exception as e:
+        print("Error: {e}")
+print(incorrect_answer("recursion", "Which of the following correctly checks if a variable 'str' is equal to \"hello\"?", ["if (str = \"hello\")",	"if (str == \"hello\")", "if (str === \"hello\")",	"Both B and C"], "Both B and C"))
+def get_summary_of_quiz(subject, correct, total, questionsIncorrect):
+    try:
+        model = genai.GenerativeModel(model_name="gemini-1.5-flash")
+        questionsIncorrectString = ""
+        for question in questionsIncorrect:
+            questionsIncorrectString += question + ", "
+        response = model.generate_content(
+            f"""
+                A highschool student who is currently learning the basics of
+                coding just scored a {correct} out of {total} on their quiz
+                on {subject}. The questions they got wrong were {questionsIncorrectString}.
+                Give them a congragulatory as well as 1-2 sentence summary on what they 
+                should work on
+            """
+        )
+        return response.text
+
+    except Exception as e:
+        print("Error: {e}")
+
+def get_help_with_question(subject, question):
+    try:
+        model = genai.GenerativeModel(model_name="gemini-1.5-flash")
+        response = model.generate_content(
+            f"""
+                Give a hint to a highschool student who recently learned about
+                the subject that is completing a quiz. The question they are
+                stuck on currently is: {question} and the subject is: {subject}.
+                Give a 1-2 sentence hint that doesn't directly tell them the 
+                answer but perhaps leads them to it.
+            """
+        )
+        return response.text
+    except Exception as e:
+        print(f"Error: {e}")
+
+
+
+#Not for current use below
+
+
+def save_questions_from_json(jsonData, subject):
     try:
         # Print raw JSON data for inspection
         print(f"Raw JSON Response: {jsonData}")
@@ -72,7 +132,8 @@ def GenerateQuestion(topic, num_questions = 20):
     )
     save_questions_from_json(response.text, topic)
 
-#if __name__ == "__main__":
+#pif __name__ == "__main__":
     #Put GenerateQuestion("subject") for what you want generated here
     #Possibility of generating new questions each week or something?
     #Free too!
+
