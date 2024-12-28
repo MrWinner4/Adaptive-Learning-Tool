@@ -1,9 +1,11 @@
 from django.db import models
+from ckeditor.fields import RichTextField
 
 class Lesson(models.Model):
     title = models.CharField(max_length = 100)
-    lecture = models.TextField
-    oder = models.PositiveIntegerField
+    description = models.TextField(default="example description")
+    lecture = RichTextField(default="example lecture")
+    order = models.PositiveIntegerField(default = 0)
 
     def __str__(self):
         return self.title
