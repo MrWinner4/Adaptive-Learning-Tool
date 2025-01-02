@@ -34,13 +34,13 @@ def incorrect_answer(subject, question, all_answers, incorrect_answer):
                 this question wrong: {question}. They put the answer as
                 {incorrect_answer} out of {all_answers}. Explain to them in 1-2 sentences why it
                 is incorrect and try to lead them to the correct answer, without
-                outright telling them.
+                outright telling them. Please adress them as "you" and not "the student".
+                You are their teacher in this scenario.
             """
         )
         return response.text
     except Exception as e:
         print("Error: {e}")
-print(incorrect_answer("recursion", "Which of the following correctly checks if a variable 'str' is equal to \"hello\"?", ["if (str = \"hello\")",	"if (str == \"hello\")", "if (str === \"hello\")",	"Both B and C"], "Both B and C"))
 def get_summary_of_quiz(subject, correct, total, questionsIncorrect):
     try:
         model = genai.GenerativeModel(model_name="gemini-1.5-flash")
@@ -53,7 +53,8 @@ def get_summary_of_quiz(subject, correct, total, questionsIncorrect):
                 coding just scored a {correct} out of {total} on their quiz
                 on {subject}. The questions they got wrong were {questionsIncorrectString}.
                 Give them a congragulatory as well as 1-2 sentence summary on what they 
-                should work on
+                should work on. Please adress them as "you" and not "the student".
+                You are their teacher in this scenario.
             """
         )
         return response.text
@@ -70,7 +71,8 @@ def get_help_with_question(subject, question):
                 the subject that is completing a quiz. The question they are
                 stuck on currently is: {question} and the subject is: {subject}.
                 Give a 1-2 sentence hint that doesn't directly tell them the 
-                answer but perhaps leads them to it.
+                answer but perhaps leads them to it. Please adress them as "you" and not "the student".
+                You are their teacher in this scenario.
             """
         )
         return response.text
