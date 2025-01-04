@@ -22,17 +22,14 @@ os.environ["GLOG_minloglevel"] = "2"
 
 genai.configure(api_key=os.getenv("BARD_API_KEY"))
 
-def incorrect_answer(subject, question, all_answers, incorrect_answer):
+def generate_feedback(subject, question, incorrect_answer):
     try:
         model = genai.GenerativeModel(model_name="gemini-1.5-flash")
-        allAnswersString = ""
-        for answer in all_answers:
-            allAnswersString += answer + ", "
         response = model.generate_content(
             f"""
                 A high school student currently learning about {subject} got
                 this question wrong: {question}. They put the answer as
-                {incorrect_answer} out of {all_answers}. Explain to them in 1-2 sentences why it
+                {incorrect_answer}. Explain to them in 1-2 sentences why it
                 is incorrect and try to lead them to the correct answer, without
                 outright telling them. Please adress them as "you" and not "the student".
                 You are their teacher in this scenario.

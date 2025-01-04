@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from .models import Lesson, Question
 from .serializers import QuizSerializer
 from django.http import JsonResponse
+from .aiutils import generate_feedback
 import random
 
 
@@ -56,21 +57,46 @@ def quiz_detail(request, id):
 
 @api_view(['POST'])
 def submit_quiz(request, id):
-    quiz = get_object_or_404(Quiz, lesson_id = id)
+    quiz = get_object_or_404(Quiz, lesson_id=id)
+    
     answers = request.data.get('answers', {})
+    
     correct_answers = 0
     incorrect_answers = []
 
-    for question_id, answer in answers.items():
+    for question_id, user_answer in answers.items():
         question = get_object_or_404(Question, id=question_id, quiz=quiz)
-        if question.correct_answer == answer:
+        
+        if question.correct_answer == user_answer:
             correct_answers += 1
         else:
             incorrect_answers.append({
-            'id': question.id,
-            'question_text': question.question_text,
-            'correct_answer': question.correct_answer
+                "id": question.id,
+                "question_text": question.question_text,
+                "user_answer": user_answer,
+                'lesson_title': question.quiz.lesson.title,
+                "correct_answer": question.correct_answer,
             })
 
-    
-    return Response({'correct_answers': correct_answers, 'incorrect_answers': incorrect_answers, 'total_questions': len(quiz.questions.all())})
+    total_questions = 5
+
+    return Response({
+        "correct_answers": correct_answers,
+        "incorrect_answers": incorrect_answers,
+        "total_questions": total_questions,
+    })
+
+api_view(['POST'])
+def get_feedback(request):
+    subject = request.data.get('subject')
+    question = request.data.get('question')
+    all_answers = request.data.get('all_answers')
+    incorrect_answer = request.data.get('incorrect_answer')
+
+    if not (subject and question and all_answers and incorrect_answer):
+        return Response({"error": "Missing paramenters"}, status=400)
+    try:
+        feedback = generate_feedback(subject, question, incorrect_answer)
+        return Response({"feedback": feedback})
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
